@@ -1,3 +1,4 @@
+// express js use kar rahe he
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -6,9 +7,10 @@ const connectDB = require("./config/db");
 const todoRoutes = require("./routes/todoRoutes");
 const errorHandler = require("./middleware/errorHandler");
 
-
+// mongodb se connect karne ke liye
 const dns = require('dns');
 dns.setServers(['8.8.8.8', '8.8.4.4']);
+
 
 
 dotenv.config();

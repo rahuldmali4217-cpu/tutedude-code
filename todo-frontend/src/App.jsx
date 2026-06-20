@@ -1,209 +1,279 @@
-
+// React hooks import kiye hain state aur lifecycle handle karne ke liye
 import { useEffect, useState } from "react";
+
+// Backend API se data fetch karne ke liye axios use kiya hai
 import axios from "axios";
+
 import "./App.css";
 
+// Backend API ka base URL
 const API = "http://localhost:5000/api/todos";
 
 function App() {
-  const [todos, setTodos] = useState([]);
-  const [title, setTitle] = useState("");
-  const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const fetchTodos = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.get(API);
-      setTodos(res.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+// Sare todos store karne ke liye state
+const [todos, setTodos] = useState([]);
 
-  useEffect(() => {
-    fetchTodos();
-  }, []);
+// Input field ka value store karne ke liye
+const [title, setTitle] = useState("");
 
-  const addTodo = async () => {
-    if (!title.trim()) return;
+// Search input ka value store karne ke liye
+const [search, setSearch] = useState("");
 
-    try {
-      await axios.post(API, {
-        title,
-      });
+// Loading state API call ke time show karne ke liye
+const [loading, setLoading] = useState(false);
 
-      setTitle("");
-      fetchTodos();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+// Backend se sare todos fetch karne ka function
+const fetchTodos = async () => {
+try {
+setLoading(true);
 
-  const deleteTodo = async (id) => {
-    try {
-      await axios.delete(`${API}/${id}`);
-      fetchTodos();
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  const editTodo = async (id, oldTitle) => {
-    const newTitle = prompt("Edit Task", oldTitle);
+  const res = await axios.get(API);
 
-    if (!newTitle) return;
+  // API se aaya hua data state me save kar diya
+  setTodos(res.data);
+} catch (error) {
+  console.log(error);
+} finally {
+  setLoading(false);
+}
 
-    try {
-      await axios.put(`${API}/${id}`, {
-        title: newTitle,
-      });
+};
 
-      fetchTodos();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+// Component load hote hi todos fetch honge
+useEffect(() => {
+fetchTodos();
+}, []);
 
-  const toggleStatus = async (todo) => {
-    const status =
-      todo.status === "Pending"
-        ? "Completed"
-        : "Pending";
+// Naya todo add karne ka function
+const addTodo = async () => {
 
-    try {
-      await axios.patch(
-        `${API}/${todo._id}/status`,
-        { status }
-      );
 
-      fetchTodos();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+// Empty task add na ho isliye validation
+if (!title.trim()) return;
 
-  const filteredTodos = todos.filter((todo) =>
-    todo.title
-      .toLowerCase()
-      .includes(search.toLowerCase())
+try {
+  await axios.post(API, {
+    title,
+  });
+
+  // Input field clear kar diya
+  setTitle("");
+
+  // Naya data fetch kar liya
+  fetchTodos();
+} catch (error) {
+  console.log(error);
+}
+
+};
+
+// Todo delete karne ka function
+const deleteTodo = async (id) => {
+try {
+await axios.delete(`${API}/${id}`);
+
+
+  fetchTodos();
+} catch (error) {
+  console.log(error);
+}
+
+};
+
+// Existing todo edit karne ka function
+const editTodo = async (id, oldTitle) => {
+
+
+// Prompt box me purana title show hoga
+const newTitle = prompt(
+  "Edit Task",
+  oldTitle
+);
+
+if (!newTitle) return;
+
+try {
+  await axios.put(`${API}/${id}`, {
+    title: newTitle,
+  });
+
+  fetchTodos();
+} catch (error) {
+  console.log(error);
+}
+
+
+};
+
+// Pending aur Completed status toggle karne ka function
+const toggleStatus = async (todo) => {
+
+
+const status =
+  todo.status === "Pending"
+    ? "Completed"
+    : "Pending";
+
+try {
+  await axios.patch(
+    `${API}/${todo._id}/status`,
+    { status }
   );
 
-  const completedTasks = todos.filter(
-    (todo) => todo.status === "Completed"
-  ).length;
+  fetchTodos();
+} catch (error) {
+  console.log(error);
+}
 
-  const pendingTasks = todos.filter(
-    (todo) => todo.status === "Pending"
-  ).length;
+};
 
-  return (
-    <div className="container">
-      <div className="header">
-        <h1>🚀 Todo Management App</h1>
-      </div>
+// Search ke according tasks filter karne ke liye
+const filteredTodos = todos.filter((todo) =>
+todo.title
+.toLowerCase()
+.includes(search.toLowerCase())
+);
 
-      <div className="card">
-        <input
-          type="text"
-          placeholder="Search Task..."
-          value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
-        />
+// Completed tasks count nikalne ke liye
+const completedTasks = todos.filter(
+(todo) => todo.status === "Completed"
+).length;
 
-        <input
-          type="text"
-          placeholder="Enter Task..."
-          value={title}
-          onChange={(e) =>
-            setTitle(e.target.value)
-          }
-        />
+// Pending tasks count nikalne ke liye
+const pendingTasks = todos.filter(
+(todo) => todo.status === "Pending"
+).length;
 
-        <button
-          className="add-btn"
-          onClick={addTodo}
-        >
-          Add Task
-        </button>
-      </div>
+return ( <div className="container">
 
-      <div className="stats">
-        <div>Total: {todos.length}</div>
-        <div>Completed: {completedTasks}</div>
-        <div>Pending: {pendingTasks}</div>
-      </div>
 
-      {loading ? (
-        <h2>Loading...</h2>
-      ) : filteredTodos.length === 0 ? (
-        <h2>No Tasks Found</h2>
-      ) : (
-        filteredTodos.map((todo) => (
-          <div
-            className="todo-card"
-            key={todo._id}
+  {/* Application Heading */}
+  <div className="header">
+    <h1>🚀 Todo Management App</h1>
+  </div>
+
+  {/* Search aur Add Todo Section */}
+  <div className="card">
+
+    {/* Search Input */}
+    <input
+      type="text"
+      placeholder="Search Task..."
+      value={search}
+      onChange={(e) =>
+        setSearch(e.target.value)
+      }
+    />
+
+    {/* New Task Input */}
+    <input
+      type="text"
+      placeholder="Enter Task..."
+      value={title}
+      onChange={(e) =>
+        setTitle(e.target.value)
+      }
+    />
+
+    {/* Add Todo Button */}
+    <button
+      className="add-btn"
+      onClick={addTodo}
+    >
+      Add Task
+    </button>
+  </div>
+
+  {/* Todo Statistics */}
+  <div className="stats">
+    <div>Total: {todos.length}</div>
+    <div>Completed: {completedTasks}</div>
+    <div>Pending: {pendingTasks}</div>
+  </div>
+
+  {/* Loading State */}
+  {loading ? (
+    <h2>Loading...</h2>
+  ) : filteredTodos.length === 0 ? (
+
+    // Agar koi task na mile
+    <h2>No Tasks Found</h2>
+
+  ) : (
+
+    // Todo List Render Karna
+    filteredTodos.map((todo) => (
+      <div
+        className="todo-card"
+        key={todo._id}
+      >
+        {/* Todo Title */}
+        <h3>{todo.title}</h3>
+
+        {/* Todo Status */}
+        <p>
+          Status:
+          <span
+            className={
+              todo.status ===
+              "Completed"
+                ? "completed"
+                : "pending"
+            }
           >
-            <h3>{todo.title}</h3>
+            {todo.status}
+          </span>
+        </p>
 
-            <p>
-              Status:
-              <span
-                className={
-                  todo.status ===
-                  "Completed"
-                    ? "completed"
-                    : "pending"
-                }
-              >
-                {" "}
-                {todo.status}
-              </span>
-            </p>
+        {/* Action Buttons */}
+        <div className="btn-group">
 
-            <div className="btn-group">
-              <button
-                className="edit-btn"
-                onClick={() =>
-                  editTodo(
-                    todo._id,
-                    todo.title
-                  )
-                }
-              >
-                Edit
-              </button>
+          {/* Edit Button */}
+          <button
+            className="edit-btn"
+            onClick={() =>
+              editTodo(
+                todo._id,
+                todo.title
+              )
+            }
+          >
+            Edit
+          </button>
 
-              <button
-                className="status-btn"
-                onClick={() =>
-                  toggleStatus(todo)
-                }
-              >
-                {todo.status ===
-                "Pending"
-                  ? "Complete"
-                  : "Undo"}
-              </button>
+          {/* Status Toggle Button */}
+          <button
+            className="status-btn"
+            onClick={() =>
+              toggleStatus(todo)
+            }
+          >
+            {todo.status ===
+            "Pending"
+              ? "Complete"
+              : "Undo"}
+          </button>
 
-              <button
-                className="delete-btn"
-                onClick={() =>
-                  deleteTodo(todo._id)
-                }
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))
-      )}
-    </div>
-  );
+          {/* Delete Button */}
+          <button
+            className="delete-btn"
+            onClick={() =>
+              deleteTodo(todo._id)
+            }
+          >
+            Delete
+          </button>
+
+        </div>
+      </div>
+    ))
+  )}
+</div>
+
+
+);
 }
 
 export default App;

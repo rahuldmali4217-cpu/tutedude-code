@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// database store karne ke liye
 const todoSchema = new mongoose.Schema(
   {
     title: {

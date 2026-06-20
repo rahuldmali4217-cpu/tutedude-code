@@ -1,5 +1,6 @@
 const todoService = require("../services/todoService");
 
+// get todo
 exports.getTodos = async (req, res, next) => {
   try {
     const todos = await todoService.getTodos();
@@ -10,6 +11,7 @@ exports.getTodos = async (req, res, next) => {
   }
 };
 
+// todo create karne ke liye
 exports.createTodo = async (req, res, next) => {
   try {
     const todo = await todoService.createTodo(req.body);
@@ -20,6 +22,7 @@ exports.createTodo = async (req, res, next) => {
   }
 };
 
+// todo update karne ke liye
 exports.updateTodo = async (req, res, next) => {
   try {
     const todo = await todoService.updateTodo(
@@ -33,6 +36,7 @@ exports.updateTodo = async (req, res, next) => {
   }
 };
 
+// todo delete karne ke liye
 exports.deleteTodo = async (req, res, next) => {
   try {
     await todoService.deleteTodo(req.params.id);
@@ -45,6 +49,7 @@ exports.deleteTodo = async (req, res, next) => {
   }
 };
 
+// todo search karne ke liye
 exports.searchTodo = async (req, res, next) => {
   try {
     const result = await todoService.searchTodo(
@@ -57,6 +62,8 @@ exports.searchTodo = async (req, res, next) => {
   }
 };
 
+
+// todo update karne ke liye
 exports.updateStatus = async (req, res, next) => {
   try {
     const todo = await todoService.updateStatus(
