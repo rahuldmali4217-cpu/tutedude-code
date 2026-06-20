@@ -6,8 +6,9 @@ import axios from "axios";
 
 import "./App.css";
 
-// Backend API ka base URL
-const API = "http://localhost:5000/api/todos";
+// Backend API ka base 
+
+const API = "https://tutedude-code.onrender.com/api/todos";
 
 function App() {
 
