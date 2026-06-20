@@ -1,0 +1,22 @@
+info:
+  name: post-todo
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:5000/api/todos
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Learn Node.js",
+        "description": "Complete Todo Assignment"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

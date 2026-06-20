@@ -1,0 +1,21 @@
+info:
+  name: put-todo
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: http://localhost:5000/api/todos/6a360132186507cb956596f2
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Learn Express"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
