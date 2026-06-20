@@ -1,4 +1,4 @@
-// database connect kar rahe he
+// database connect kar rahe he 
 const mongoose = require("mongoose");
 
 const connectDB = async () => {

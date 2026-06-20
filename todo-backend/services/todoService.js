@@ -32,7 +32,7 @@ exports.searchTodo = async (keyword) => {
   });
 };
 
-// update todo
+// update todo 
 exports.updateStatus = async (id, status) => {
   return await Todo.findByIdAndUpdate(
     id,

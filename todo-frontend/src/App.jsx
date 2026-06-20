@@ -119,7 +119,7 @@ const status =
 try {
   await axios.patch(
     `${API}/${todo._id}/status`,
-    { status }
+    { status } 
   );
 
   fetchTodos();

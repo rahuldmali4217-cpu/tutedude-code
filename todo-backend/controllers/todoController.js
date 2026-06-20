@@ -63,7 +63,7 @@ exports.searchTodo = async (req, res, next) => {
 };
 
 
-// todo update karne ke liye
+// todo update karne ke liye 
 exports.updateStatus = async (req, res, next) => {
   try {
     const todo = await todoService.updateStatus(

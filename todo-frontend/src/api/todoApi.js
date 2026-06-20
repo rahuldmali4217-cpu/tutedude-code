@@ -7,7 +7,7 @@ export const getTodos = () =>
   axios.get(API);
 
 export const createTodo = (data) =>
-  axios.post(API, data);
+  axios.post(API, data); 
 
 export const deleteTodo = (id) =>
   axios.delete(`${API}/${id}`);

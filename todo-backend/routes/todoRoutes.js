@@ -11,7 +11,7 @@ const {
   updateStatus,
 } = require("../controllers/todoController");
 
-// routing karne ke liye
+// routing karne ke liye 
 router.get("/", getTodos);
 
 router.post("/", createTodo);
